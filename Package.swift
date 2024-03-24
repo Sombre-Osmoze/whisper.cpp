@@ -16,12 +16,15 @@ var cSettings: [CSetting] = [
   .unsafeFlags(["-fno-objc-arc"]),
 ]
 
-var linkerSettings: [LinkerSetting] = [.linkedFramework("Accelerate")]
+var linkerSettings: [LinkerSetting] = []
+
 
 #if os(Linux)
   // .define("_GNU_SOURCE"),
   cSettings.append(.define("WHISPER_NO_ACCELERATE"))
   cSettings.append(.define("_GNU_SOURCE"))
+cSettings.append(.unsafeFlags(["-shared"]))
+
 
 #else
   resources.append(
@@ -39,6 +42,10 @@ var linkerSettings: [LinkerSetting] = [.linkedFramework("Accelerate")]
     // .define("ACCELERATE_NEW_LAPACK"),
     // .define("ACCELERATE_LAPACK_ILP64")
   ])
+
+linkerSettings.append(
+  .linkedFramework("Accelerate")
+)
 
 #endif
 
